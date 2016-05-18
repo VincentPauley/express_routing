@@ -1,23 +1,31 @@
 var express = require('express'),
-    app = express(),
     path = require('path'),
-    fs = require('fs');
+    app = express();
 
-/* setup routes */
-var index = __dirname + '/views/index.html',
-    profile = __dirname + '/views/profile.html';
+/* setup for app to use jade as the templating engine */
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.set('view options', { layout: true });
 
-/* When user requests the homepage via a get requests */
+/* Global username var */
+var userName = 'Cool Guy';
+
+/* GET request for index, root */
 app.get('/', function(req, res) {
-  // read index.html from the file system and pipe the response back to the client
-  fs.createReadStream(index).pipe(res);
+  res.render('index', {userName : userName});
 });
 
-/* When user requests profile page */
-app.get('/profile', function(req, res){
-  fs.createReadStream(profile).pipe(res);
+/* GET request for profile page */
+app.get('/profile', function(req, res) {
+  res.render('profile', {userName: userName});
 });
 
-/* port stuff */
+/* GET request for friends page, lol get some friends loser */
+app.get('/friends', function(req, res) {
+  // notice no args to send variables
+  res.render('friends', {});
+});
+
+/* Tell da app which port to listen on */
 app.listen(8080);
-console.log('listening on port 8080');
+console.log('listening on 8080');
